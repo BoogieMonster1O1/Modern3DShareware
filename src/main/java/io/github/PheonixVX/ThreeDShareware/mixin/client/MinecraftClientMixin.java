@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screen.Overlay;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.Window;
-import net.minecraft.text.Text;
+
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -71,6 +71,6 @@ public abstract class MinecraftClientMixin {
 
 	@ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 1), method = "<init>")
 	private Screen redirectScreen (Screen originalScreen) {
-		return new CustomSplashScreen(Text.of("Awesome Intro"));
+		return new CustomSplashScreen();
 	}
 }

@@ -32,7 +32,6 @@ public class BarrelBlock extends BlockWithEntity {
 	public static final DirectionProperty FACING = Properties.FACING;
 	public static final BooleanProperty OPEN = Properties.OPEN;
 
-
 	public BarrelBlock(Block.Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(OPEN, false));

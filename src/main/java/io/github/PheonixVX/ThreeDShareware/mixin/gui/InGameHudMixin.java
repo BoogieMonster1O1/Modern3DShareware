@@ -63,14 +63,14 @@ public abstract class InGameHudMixin extends DrawableHelper {
 		float offset = this.getZOffset();
 		this.setZOffset(-660);
 		this.drawTexture(matrices, hotBarWidth, height, 0, 64, 256, 64);
-		RenderSystem.pushMatrix();
-		RenderSystem.translatef(0.0f, 0.0f, -200.0f);
+		matrices.push();
+		matrices.translate(0.0f, 0.0f, -200.0f);
 		int time = (int)(Util.getMeasuringTimeMs() / 2000L % 4L);
 		float[] ticks = new float[]{-20.0f, 0.0f, 20.0f, 0.0f};
 		if (this.client.getEntityRenderDispatcher().camera != null) {
 			InventoryScreen.drawEntity(hotBarWidth + 128, height + 135, 64, ticks[time], 0.0f, playerEntity);
 		}
-		RenderSystem.popMatrix();
+		matrices.pop();
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 		this.client.getTextureManager().bindTexture(HOT_BAR_TEXTURE);
 		this.setZOffset(-90);

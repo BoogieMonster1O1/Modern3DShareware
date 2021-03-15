@@ -1,12 +1,18 @@
 package io.github.PheonixVX.ThreeDShareware.gui.screen;
 
+import java.io.IOException;
+import java.util.Random;
+
 import com.google.common.util.concurrent.Runnables;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import javafx.scene.transform.Translate;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.gui.CubeMapRenderer;
 import net.minecraft.client.gui.RotatingCubeMapRenderer;
-import net.minecraft.client.gui.screen.*;
+import net.minecraft.client.gui.screen.ConfirmChatLinkScreen;
+import net.minecraft.client.gui.screen.CreditsScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.options.AccessibilityOptionsScreen;
 import net.minecraft.client.gui.screen.options.LanguageOptionsScreen;
@@ -16,28 +22,18 @@ import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.realms.gui.screen.RealmsBridgeScreen;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ChatUtil;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.world.gen.GeneratorOptions;
 import net.minecraft.world.level.storage.LevelStorage;
-import net.minecraft.world.level.storage.LevelSummary;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.util.Random;
-
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "ConstantConditions"})
 public class CustomTitleScreen extends Screen {
 	public static final CubeMapRenderer panoramaCubeMap = new CubeMapRenderer(new Identifier("threedshareware", "textures/gui/title/background/panorama"));
 	public static final String OUTDATED_GL_TEXT = "Please click " + Formatting.UNDERLINE + "here" + Formatting.RESET + " for more information.";
@@ -232,9 +228,7 @@ public class CustomTitleScreen extends Screen {
 		float var4 = this.doBackgroundFade ? (float) (Util.getMeasuringTimeMs() - this.backgroundFadeStart) / 1000.0F : 1.0F;
 		fill(matrices, 0, 0, this.width, this.height, -1);
 		this.backgroundRenderer.render(delta, MathHelper.clamp(var4, 0.0F, 1.0F));
-		int var5 = 1;
 		int var6 = this.width / 2 - 137;
-		int var7 = 1;
 		this.client.getTextureManager().bindTexture(panoramaOverlay);
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
@@ -261,27 +255,27 @@ public class CustomTitleScreen extends Screen {
 			}
 
 			GlStateManager.enableAlphaTest();
-			GlStateManager.pushMatrix();
-			GlStateManager.translatef(370.0F, 50.0F, 100.0F);
-			GlStateManager.scalef(80.0F, 80.0F, 80.0F);
-			long var10 = Util.getMeasuringTimeMs();
-			GlStateManager.rotatef((float) (var10 / 10L % 360L), 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotatef((float) (var10 / 15L % 360L), 1.0F, 0.0F, 0.0F);
-			GlStateManager.rotatef((float) (var10 / 20L % 360L), 0.0F, 0.0F, 1.0F);
+			matrices.push();
+			matrices.translate(370, 50, 100);
+			matrices.scale(80, 80, 80);
+			long timestamp = Util.getMeasuringTimeMs();
+			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion((float) (timestamp / 10L % 360L)));
+			matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion((float) (timestamp / 15L % 360L)));
+			matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion((float) (timestamp / 12L % 360L)));
 			// TODO: Check this
 			//this.client.getItemRenderer().renderItem(new ItemStack(Items.CUT_SANDSTONE), ModelTransformation.Mode.NONE, 0, 0, matrices, null);
-			GlStateManager.popMatrix();
+			matrices.pop();
 			this.client.getTextureManager().bindTexture(EDITION_TITLE_TEXTURE);
 			drawTexture(matrices, var6 + 88, 67, 0.0F, 0.0F, 98, 14, 128, 16);
 			if (this.splashText != null) {
-				GlStateManager.pushMatrix();
-				GlStateManager.translatef((float) (this.width / 2 + 90), 70.0F, 0.0F);
-				GlStateManager.rotatef(-20.0F, 0.0F, 0.0F, 1.0F);
+				matrices.push();
+				matrices.translate((float) (this.width / 2 + 90), 70.0F, 0.0F);
+				matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(-20));
 				float var13 = 1.8F - MathHelper.abs(MathHelper.sin((float) (Util.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
 				var13 = var13 * 100.0F / (float) (this.textRenderer.getWidth(this.splashText) + 32);
-				GlStateManager.scalef(var13, var13, var13);
+				matrices.scale(var13, var13, var13);
 				drawCenteredString(matrices, this.textRenderer, this.splashText, 0, -8, 16776960 | var9);
-				GlStateManager.popMatrix();
+				matrices.pop();
 			}
 
 			String var14 = "Minecraft 3D Shareware v1.34";

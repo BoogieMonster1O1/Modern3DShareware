@@ -19,6 +19,7 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@SuppressWarnings("ConstantConditions")
 public class DeveloperCastScreen extends Screen {
 	private static final Identifier field_19193 = new Identifier("sound.sys");
 

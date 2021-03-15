@@ -8,6 +8,8 @@ import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.resource.ResourceManager;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,7 +33,7 @@ public class GameRendererMixin {
 
 	@Inject(at = @At("TAIL"), method = "render")
 	public void render (float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-		GlStateManager.disableLighting();
+		RenderSystem.disableLighting();
 		int var1 = this.client.getWindow().getScaledWidth();
 		TextRenderer textRenderer = this.client.textRenderer;
 		MatrixStack stack = new MatrixStack();

@@ -29,16 +29,15 @@ public class DOSScreen extends Screen {
 	@Override
 	public void render (MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.client.getTextureManager().bindTexture(field_19193);
-		Tessellator var4 = Tessellator.getInstance();
-		BufferBuilder var5 = var4.getBuffer();
-		var5.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-		var5.vertex(0.0D, this.height, this.getZOffset()).texture(0.0F, 1.0F).next();
-		var5.vertex(this.width, this.height, this.getZOffset()).texture(1.0F, 1.0F).next();
-		var5.vertex(this.width, 0.0D, this.getZOffset()).texture(1.0F, 0.0F).next();
-		var5.vertex(0.0D, 0.0D, this.getZOffset()).texture(0.0F, 0.0F).next();
-		var4.draw();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder vertexConsumer = tessellator.getBuffer();
+		vertexConsumer.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
+		vertexConsumer.vertex(0.0D, this.height, this.getZOffset()).texture(0.0F, 1.0F).next();
+		vertexConsumer.vertex(this.width, this.height, this.getZOffset()).texture(1.0F, 1.0F).next();
+		vertexConsumer.vertex(this.width, 0.0D, this.getZOffset()).texture(1.0F, 0.0F).next();
+		vertexConsumer.vertex(0.0D, 0.0D, this.getZOffset()).texture(0.0F, 0.0F).next();
+		tessellator.draw();
 	}
-
 
 	public static class class_4282 extends ResourceTexture {
 		private final Identifier field_19194;
