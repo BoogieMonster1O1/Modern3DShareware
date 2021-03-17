@@ -26,6 +26,7 @@ public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntit
 
 	/**
 	 * @author PheonixVX
+	 * @reason so that mixin doesnt hate me
 	 */
 	@Overwrite
 	public void tick() {
